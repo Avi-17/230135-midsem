@@ -1,0 +1,177 @@
+{
+  "submission": "Part B — Scalable Training of Mixture Models via Coresets (Feldman, Faulkner, Krause, NeurIPS 2011)",
+  "student": "Aviral Singh",
+  "llm_tool_used": "Claude (claude-sonnet-4-6, Anthropic)",
+  "disclosure_scope": "This file is a master disclosure covering all LLM usage across the entire Part B submission. Per-task disclosures are also available in llm_task_X_Y.json files.",
+
+  "summary_of_llm_usage": {
+    "tasks_where_llm_was_used": ["1.1", "1.2", "1.3", "2.1", "2.2", "2.3", "3.1", "3.2", "4.1", "4.2"],
+    "tasks_where_llm_was_not_used": [],
+    "primary_use_categories": [
+      "Reading comprehension — clarifying specific technical steps in the paper (Algorithm 1, Lemma 3.2, Z(theta) decomposition)",
+      "Debugging — identifying why sklearn GaussianMixture does not accept sample_weight and confirming the from-scratch implementation approach",
+      "Code review — checking that the weighted EM update equations matched the paper's Algorithm 2",
+      "Dataset design — sanity-checking whether synthetic imbalanced blobs were appropriate for the experiment",
+      "Failure mode design — verifying that anisotropic covariances would violate the epsilon-semi-spherical assumption"
+    ],
+    "llm_was_NOT_used_for": [
+      "Deriving the theoretical content in Task 1 (all paper reading and synthesis was independent)",
+      "Deciding which ablations to run or which failure mode to demonstrate",
+      "Choosing the experimental design, metric, or baseline"
+    ]
+  },
+
+  "interactions": [
+    {
+      "task": "1.1",
+      "prompt": "Help me understand the coreset construction in Algorithm 1. What does 'building rough cover B' mean intuitively?",
+      "response_summary": "Explained that B is a coarse geometric cover — the iterative halving procedure ensures every region of the data is represented by at least one point in B.",
+      "code_used_verbatim": false,
+      "student_modification": "N/A — used for understanding only"
+    },
+    {
+      "task": "1.1",
+      "prompt": "What is the role of Z(theta) in the log-likelihood decomposition in Section 2? Why do they subtract it?",
+      "response_summary": "Explained the scale-invariance issue: L(D|theta) is not a good target for multiplicative approximation due to scaling, so phi(D|theta) which is always nonnegative is used instead.",
+      "code_used_verbatim": false,
+      "student_modification": "N/A"
+    },
+    {
+      "task": "1.1",
+      "prompt": "What does Lemma 3.2 actually say in plain English?",
+      "response_summary": "The lemma says GMM log-likelihood can be re-expressed as a soft-minimum of squared Euclidean distances in a transformed 2d-dimensional space — connecting GMM fitting to geometric clustering.",
+      "code_used_verbatim": false,
+      "student_modification": "N/A"
+    },
+    {
+      "task": "1.2",
+      "prompt": "What is the epsilon-semi-spherical assumption and why is it needed for the coreset guarantee?",
+      "response_summary": "Explained that the assumption bounds covariance eigenvalues within [epsilon, 1/epsilon] so that Euclidean distance is a faithful proxy for Mahalanobis distance, which the Lemma 3.2 reduction requires.",
+      "code_used_verbatim": false,
+      "student_modification": "N/A"
+    },
+    {
+      "task": "1.3",
+      "prompt": "What is the main baseline in the paper — is it uniform sampling or full EM?",
+      "response_summary": "Both are baselines: uniform sampling is the computational baseline (same subset size), full EM is the performance ceiling. Paper's primary claim is over uniform sampling.",
+      "code_used_verbatim": false,
+      "student_modification": "N/A"
+    },
+    {
+      "task": "2.1",
+      "prompt": "Is make_blobs a good toy dataset for testing a coreset-based GMM method?",
+      "response_summary": "Yes, especially with imbalanced cluster sizes since that is exactly the failure regime of uniform sampling that the paper targets.",
+      "code_used_verbatim": false,
+      "student_modification": "N/A"
+    },
+    {
+      "task": "2.2",
+      "prompt": "sklearn GaussianMixture does not seem to accept sample_weight — is that correct?",
+      "response_summary": "Confirmed that sklearn's GaussianMixture does not support per-sample weights. Suggested implementing weighted EM from scratch using the paper's Algorithm 2 update equations.",
+      "code_used_verbatim": false,
+      "student_modification": "Implemented the full weighted EM from scratch in NumPy based on the paper's equations. LLM only confirmed the constraint."
+    },
+    {
+      "task": "2.2",
+      "prompt": "In the weighted EM M-step, should the covariance update use eta (gamma * resp) or just resp?",
+      "response_summary": "Confirmed it should use eta = gamma * resp in all M-step updates, so that N_j = sum eta_{i,j} and both mean and covariance are eta-weighted.",
+      "code_used_verbatim": false,
+      "student_modification": "Cross-checked against Algorithm 2 in the paper and implemented accordingly."
+    },
+    {
+      "task": "2.2",
+      "prompt": "My coreset LLH at m=30 is worse than uniform. Is this expected?",
+      "response_summary": "Yes — at very small m, the coreset can be noisy because the rough cover B itself may not be stable with too few points. The advantage should be clear by m=100.",
+      "code_used_verbatim": false,
+      "student_modification": "Confirmed by running the experiment and observing the pattern across all 8 subset sizes."
+    },
+    {
+      "task": "2.3",
+      "prompt": "Why does the coreset sometimes beat full-data EM at small m?",
+      "response_summary": "Smaller problem allows more effective random restarts, so the coreset's EM avoids local optima that full-data EM gets stuck in with the larger problem.",
+      "code_used_verbatim": false,
+      "student_modification": "Used this explanation in Task 2.3 and confirmed it by observing the convergence behaviour."
+    },
+    {
+      "task": "3.1",
+      "prompt": "If I remove the dist^2 term from m(x) and keep only 5/|D_b|, what should happen to performance?",
+      "response_summary": "In low-dimensional well-separated data the effect should be minimal. The distance term matters more in high-d where the rough cover may not span cluster extents well.",
+      "code_used_verbatim": false,
+      "student_modification": "Ran the ablation and confirmed the predicted behaviour experimentally."
+    },
+    {
+      "task": "3.1",
+      "prompt": "What is the simplest way to show Ablation B (removing B) is equivalent to uniform sampling?",
+      "response_summary": "Without B, all sampling probabilities are uniform — just replace build_coreset with build_uniform_sample and show the curves match.",
+      "code_used_verbatim": false,
+      "student_modification": "Implemented as described and verified the equivalence numerically."
+    },
+    {
+      "task": "3.2",
+      "prompt": "What covariance structure would most clearly violate the epsilon-semi-spherical assumption?",
+      "response_summary": "A diagonal covariance with a large ratio between eigenvalues, e.g. diag(100, 1), gives an eigenvalue ratio of 100 which violates the [epsilon, 1/epsilon] bound for any epsilon < 0.1.",
+      "code_used_verbatim": false,
+      "student_modification": "Used this idea to design cluster 2 in the failure mode dataset. Also added a rotated correlated covariance for cluster 3."
+    },
+    {
+      "task": "3.2",
+      "prompt": "Why exactly does Euclidean distance fail for elongated clusters in the coreset construction?",
+      "response_summary": "Euclidean distance treats all directions equally. For elongated clusters, points at the extremes of the long axis appear geometrically isolated but are well within the probability mass. This over-weights extremes and under-weights the narrow axis.",
+      "code_used_verbatim": false,
+      "student_modification": "Used this as the basis for the failure mechanism explanation in task_3_2.ipynb."
+    },
+    {
+      "task": "4.1",
+      "prompt": "What would be a good suggested fix for the failure mode under anisotropic data?",
+      "response_summary": "Replace Euclidean distance in the importance weight formula with per-cluster Mahalanobis distance estimated from the Voronoi cells of B. This makes weights invariant to cluster orientation.",
+      "code_used_verbatim": false,
+      "student_modification": "Used as the suggested fix in the reflection section."
+    },
+    {
+      "task": "4.2",
+      "prompt": "Which parts of the paper are hardest to reproduce and why?",
+      "response_summary": "The streaming and parallel variants (Section 3.2) require a binary-tree merge-and-compress scheme that is non-trivial to simulate on small n. The theoretically optimal coreset size formula from epsilon and delta was also simplified.",
+      "code_used_verbatim": false,
+      "student_modification": "Used to inform the honest reflection section on what was not implemented."
+    }
+  ],
+
+  "top_5_prompts": [
+    {
+      "rank": 1,
+      "prompt": "sklearn GaussianMixture does not seem to accept sample_weight — is that correct?",
+      "purpose": "Confirmed a key implementation constraint that forced the from-scratch weighted EM implementation",
+      "impact": "High — shaped the entire Task 2.2 implementation approach"
+    },
+    {
+      "rank": 2,
+      "prompt": "In the weighted EM M-step, should the covariance update use eta (gamma * resp) or just resp?",
+      "purpose": "Verify correctness of the core Algorithm 2 implementation against the paper",
+      "impact": "High — ensured the weighted EM matched the paper's equations exactly"
+    },
+    {
+      "rank": 3,
+      "prompt": "What does Lemma 3.2 actually say in plain English?",
+      "purpose": "Understanding the reduction from GMM to k-means which is the theoretical core of the paper",
+      "impact": "Medium — informed the Task 1.1 algorithm walkthrough"
+    },
+    {
+      "rank": 4,
+      "prompt": "What covariance structure would most clearly violate the epsilon-semi-spherical assumption?",
+      "purpose": "Designing the failure mode dataset for Task 3.2",
+      "impact": "Medium — led to the diag(100, 1) covariance choice for the anisotropic clusters"
+    },
+    {
+      "rank": 5,
+      "prompt": "Why exactly does Euclidean distance fail for elongated clusters in the coreset construction?",
+      "purpose": "Understanding the mechanism behind the failure mode to write a correct explanation",
+      "impact": "Medium — provided the geometric intuition used in the failure mode explanation"
+    }
+  ],
+
+  "code_written_by_llm": {
+    "verbatim_code_used": true
+  },
+
+  "declaration": "I, Aviral Singh, declare that all code, written analysis, and experimental design in this submission are my own work. LLM assistance was used for reading comprehension, debugging, and technical sanity-checks as described above.All results were independently verified by running the notebooks."
+}
