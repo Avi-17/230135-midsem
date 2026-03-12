@@ -1,0 +1,118 @@
+{
+    "student_metadata": {
+      "name": "Aviral Singh",
+      "roll_number": "230135",
+      "course": "Advanced Machine Learning",
+      "exam": "Mid-Semester Examination",
+      "part": "A",
+      "submission_date": "2026-03-02"
+    },
+    "llm_tools_used": [
+      {
+        "tool_name": "Perplexity Chat",
+        "model": "GPT-5.1",
+        "provider": "Perplexity AI"
+      }
+    ],
+    "full_llm_interaction_log": [
+      {
+        "interaction_id": 1,
+        "date": "2026-03-02",
+        "tool_name": "Perplexity Chat",
+        "model": "GPT-5.1",
+        "purpose": "Understanding the paper selection constraints for the Advanced Machine Learning mid-sem exam",
+        "prompt": "Summarize the key constraints and requirements for Part A of the Advanced Machine Learning mid-semester exam from the provided PDF.",
+        "llm_response_used": "Yes",
+        "how_it_helped": "Clarified the allowed venues, years, and method families (GMM, SVM, ARIMA) and the reproducibility and compute constraints.",
+        "student_verification": "I cross-checked the extracted constraints with the original PDF to ensure that the summary matched the rubric and rules.",
+        "confidence_level": 5
+      },
+      {
+        "interaction_id": 2,
+        "date": "2026-03-02",
+        "tool_name": "Perplexity Chat",
+        "model": "GPT-5.1",
+        "purpose": "Finding candidate GMM/SVM/time-series papers satisfying the venue and year constraints",
+        "prompt": "Suggest research papers between 2009 and 2012 that use GMM, SVM, or ARIMA and are published in CORE A* venues, and check that they are feasible to reproduce on CPU.",
+        "llm_response_used": "Partially",
+        "how_it_helped": "Provided an initial shortlist of candidate papers and helped filter out obviously unsuitable options such as non-CORE venues or deep-learning-heavy works.",
+        "student_verification": "I manually checked each suggested paper’s venue, year, and method family using digital libraries and the CORE ranking portal.",
+        "confidence_level": 4
+      },
+      {
+        "interaction_id": 3,
+        "date": "2026-03-02",
+        "tool_name": "Perplexity Chat",
+        "model": "GPT-5.1",
+        "purpose": "Checking detailed suitability of specific papers against the rubric",
+        "prompt": "Compare 'Scalable Training of Mixture Models via Coresets' and 'A Comparison of Optimization Methods and Software for Large-scale L1-regularized Linear Classification' with respect to the exam constraints and reproducibility.",
+        "llm_response_used": "Yes",
+        "how_it_helped": "Helped contrast the two papers in terms of method family (GMM vs SVM/optimization), risk of being considered a system/benchmark paper, and realistic CPU-only reproduction strategies.",
+        "student_verification": "I skimmed both papers to confirm that the described main contributions and experimental settings matched what was summarized.",
+        "confidence_level": 5
+      },
+      {
+        "interaction_id": 4,
+        "date": "2026-03-02",
+        "tool_name": "Perplexity Chat",
+        "model": "GPT-5.1",
+        "purpose": "Assessing whether the L1-SVM optimization paper counts as methodological under the rubric",
+        "prompt": "Given that the L1-regularized linear classification paper introduces CDN and OWL-QN, does it qualify as a methodological SVM-related paper under the exam rules?",
+        "llm_response_used": "Yes",
+        "how_it_helped": "Clarified that the paper is indeed methodological because it introduces new optimization algorithms for L1-SVM/logistic regression, but also highlighted the higher implementation and scale complexity.",
+        "student_verification": "I checked the sections describing CDN and OWL-QN to confirm they are novel algorithmic contributions rather than just software engineering tweaks.",
+        "confidence_level": 4
+      },
+      {
+        "interaction_id": 5,
+        "date": "2026-03-02",
+        "tool_name": "Perplexity Chat",
+        "model": "GPT-5.1",
+        "purpose": "Selecting a final paper that safely satisfies all constraints",
+        "prompt": "Between 'Scalable Training of Mixture Models via Coresets' and the L1-SVM paper, which one best satisfies all the exam constraints and is safest for reproduction on a laptop?",
+        "llm_response_used": "Yes",
+        "how_it_helped": "Guided the final decision towards the coreset GMM paper by weighing method alignment, reproducibility, and risk of being interpreted as a system/benchmark paper.",
+        "student_verification": "I re-read the exam rubric and confirmed that a GMM + EM coreset method aligns directly with the allowed method families and reproducibility expectations.",
+        "confidence_level": 5
+      }
+    ],
+    "top_5_prompts": [
+      {
+        "rank": 1,
+        "interaction_id": 3,
+        "prompt": "Compare 'Scalable Training of Mixture Models via Coresets' and 'A Comparison of Optimization Methods and Software for Large-scale L1-regularized Linear Classification' with respect to the exam constraints and reproducibility.",
+        "why_important": "Forced a detailed side-by-side analysis of method family, paper type, and compute feasibility, which directly informed the final safe paper choice."
+      },
+      {
+        "rank": 2,
+        "interaction_id": 2,
+        "prompt": "Suggest research papers between 2009 and 2012 that use GMM, SVM, or ARIMA and are published in CORE A* venues, and check that they are feasible to reproduce on CPU.",
+        "why_important": "Provided a starting pool of candidate papers, saving time and helping focus manual checks on a smaller, more relevant set."
+      },
+      {
+        "rank": 3,
+        "interaction_id": 1,
+        "prompt": "Summarize the key constraints and requirements for Part A of the Advanced Machine Learning mid-semester exam from the provided PDF.",
+        "why_important": "Ensured that I had a clear mental checklist of constraints (venue, year, method, reproducibility) before evaluating any paper."
+      },
+      {
+        "rank": 4,
+        "interaction_id": 4,
+        "prompt": "Given that the L1-regularized linear classification paper introduces CDN and OWL-QN, does it qualify as a methodological SVM-related paper under the exam rules?",
+        "why_important": "Helped refine my understanding of what counts as a methodological contribution versus a system/benchmark paper in the context of the rubric."
+      },
+      {
+        "rank": 5,
+        "interaction_id": 5,
+        "prompt": "Between 'Scalable Training of Mixture Models via Coresets' and the L1-SVM paper, which one best satisfies all the exam constraints and is safest for reproduction on a laptop?",
+        "why_important": "Helped me make a final, justified choice of paper that balances theoretical interest with practical feasibility for Parts B and C."
+      }
+    ],
+    "student declaration": {
+      "statement": "I declare that this JSON file contains a complete and honest record of my LLM usage for Part A",
+      "understanding acknowledged": true,
+      "signature": "Aviral Singh",
+      "date": "2026-03-02"
+    }
+  }
+  
